@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+<!doctype html>
+
+
+{% block content %}
+        <header>
+            <div class="header_middle">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8 col-md-8">
+                            <div class="logo">
+                                <a href="/"><img src="/static/img/logo.png" alt="exporso logo"></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-1">
+                            <div class="d-none d-lg-block">
+                                <span class="cart_count1">тел 560560560</span><br>
+                                <span class="cart_count1">Pupsic@Mail.Ru</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header_bottom">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-12">
+                            <div class="menu d-none d-lg-block ">
+                                <nav>
+                                    <ul>
+                                        {%for m in menu%}
+                                        <li><a href="{{m.url}}"> {{m.name}} </a></li>
+                                        {%endfor%}
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                        <div class="col-12 d-lg-none">
+                            <!--Mobile menu murkup start-->
+                            <div class="mobile-menu-area d-lg-none">
+                                <div class="mobile-menu clearfix">
+                                    <nav>
+                                        <ul>
+                                            {%for m in menu%}
+                                            <li><a href="{{m.url}}"> {{m.name}} </a></li>
+                                            {%endfor%}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <!--Mobile menu murkup End-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </header>
+            <div class="exporso_wrapper">
+                <!--error section area start-->
+                <div class="error_section ptb-100">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="error_form">
+                                    <h1>404</h1>
+                                    <h2>Opps! PAGE NOT BE FOUND</h2>
+                                    <p>Sorry but the page you are looking for does not exist, have been<br> removed, name changed or is temporarity unavailable.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Error Secton end-->
+            </div>
+{% endblock %}

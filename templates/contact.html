@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<header>
+<div class="header_middle">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 col-md-8">
+                <div class="logo">
+                    <a href="/"><img src="/static/img/logo.png" alt="exporso logo"></a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-1">
+                <div class="d-none d-lg-block">
+                    <span class="cart_count1">тел 560560560</span><br>
+                    <span class="cart_count1">Pupsic@Mail.Ru</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="header_bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-12">
+                <div class="menu d-none d-lg-block ">
+                    <nav>
+                        <ul>
+                            {%for m in menu%}
+                            <li><a href="{{m.url}}"> {{m.name}} </a></li>
+                            {%endfor%}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-12 d-lg-none">
+                <!--Mobile menu murkup start-->
+                <div class="mobile-menu-area d-lg-none">
+                    <div class="mobile-menu clearfix">
+                        <nav>
+                            <ul>
+                                {%for m in menu%}
+                                <li><a href="{{m.url}}"> {{m.name}} </a></li>
+                                {%endfor%}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!--Mobile menu murkup End-->
+            </div>
+        </div>
+    </div>
+</div>
+</header>
+
+<div class="exporso_wrapper">
+    <!--Contact us start-->
+        <div class="contact-us pt-110 pb-100">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-12">
+                        <div class="contact-us-desc">
+                           
+                             <div class="get-in-touch">
+                                <h3>Контакты</h3>
+
+                                <p>  </p>
+                             </div>
+                             <div class="contact-social">
+
+                             </div>
+                             <div class="contact-address">
+                                 <h3>Адрес</h3>
+                                 <div class="contact-list">
+                                     <div class="single-contact-list">
+                                         <div class="contact-icon">
+                                             <i class="zmdi zmdi-pin"></i>
+                                         </div>
+                                         <div class="conatct-desc">
+                                             <p>78 </p>
+                                         </div>
+                                     </div>
+                                     <div class="single-contact-list">
+                                         <div class="contact-icon">
+                                             <i class="zmdi zmdi-phone"></i>
+                                         </div>
+                                         <div class="conatct-desc">
+                                             <p> 78 </p>
+                                         </div>
+                                     </div>
+                                     <div class="single-contact-list">
+                                         <div class="contact-icon">
+                                             <i class="zmdi zmdi-email"></i>
+                                         </div>
+                                         <div class="conatct-desc">
+                                             <p>78 </p>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-12">
+                        <div class="map-area">
+                           <div style="width:100%;height:460px;">
+                               <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A43e608cbc2306d73c359b5f77652c94530b517355cedf73222a26296ecf2d9f5&amp;source=constructor" width="500" height="400" frameborder="0"></iframe>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+        <!--Contact us end-->
+ </div>
+
+ {% endblock %}

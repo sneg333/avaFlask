@@ -1,0 +1,39 @@
+
+<html class="no-js" lang="zxx">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>{{title}} </title>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+        <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet" />
+        <link href="{{url_for('static', filename='css/plugin.css')}}" rel="stylesheet" />
+        <link href="{{url_for('static', filename='css/bundle.css')}}" rel="stylesheet" />
+        <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet" />
+        <link href="{{url_for('static', filename='css/responsive.css')}}" rel="stylesheet" />
+        <link href="{{url_for('static', filename='css/my_style.css')}}" rel="stylesheet" />
+
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favico1n.ico">
+    </head>
+    <body>
+         
+        {%- block content -%}
+        {%- endblock content -%}
+
+
+        <script src="{{url_for('static', filename='js/jquery-1.12.0.min.js')}}"></script>
+        <script src="{{url_for('static', filename='js/popper.js')}}"></script>
+        <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+        <script src="{{url_for('static', filename='js/plugins.js')}}"></script>
+        <script src="{{url_for('static', filename='js/main.js')}}"></script>
+        <script src="{{url_for('static', filename='js/map.js')}}"></script>
+        <script src="{{url_for('static', filename='js/map.js')}}"></script>
+        
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdWLY_Y6FL7QGW5vcO3zajUEsrKfQPNzI"></script>
+        <script src="https://www.google.com/jsapi"></script>
+
+
+    </body>
+</html>

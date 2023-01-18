@@ -1,0 +1,13 @@
+.billion3 {
+  font-size: 1.2em;
+  color: #b1d4f0;
+}
+
+.flash.success {
+  background-color: greenyellow;
+  font-size: 1.5em;
+}
+.flash.error {
+  background-color: red;
+  font-size: 1.5em;
+}

@@ -5,7 +5,7 @@ app.config['SECRET_KEY'] = '112244'
 menu =[
         {"name": "Домашняя", "url": "/"},
         {"name": "Контакты", "url": "contact"},
-        {"name": "Добавить псот", "url": "createpost"},
+        {"name": "Добавить поcт", "url": "createpost"},
     ]
 
 @app.route('/')

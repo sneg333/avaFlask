@@ -1,48 +1,65 @@
-from flask import Flask, render_template, url_for, request, flash
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+import sqlite3
+import os
+from flask import Flask, render_template, url_for, request, flash, g
+from FDataBase import FDataBase
+
+DATABASE = 'tmp/app.db'
+DEBUG = True
+SECRET_KEY = '112244'
 
 app = Flask(__name__)
+app.config.from_object(__name__)
+app.config.update(dict(DATABASE=os.path.join(app.root_path, 'app.db')))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ava.db'
-db = SQLAlchemy(app)
+#функция для установления соединения с БД
+def connect_db():
+    conn = sqlite3.connect(app.config['DATABASE'])
+    conn.row_factory = sqlite3.Row
+    return conn
 
-class New(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable = False)
-    mini_text = db.Column(db.String(300), nullable = False)
-    text = db.Column(db.Text, nullable = False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __repr__(self):
-        return '<New %r>' % self.id
+def create_db():
+    db = connect_db()
+    with app.open_resource('sq_db.sql', mode='r') as f:
+        db.cursor().executescript(f.read())
+    db.commit()
+    db.close()
 
-menu =[
-        {"name": "Домашняя", "url": "/"},
-        {"name": "Контакты", "url": "contact"},
-        {"name": "Добавить поcт", "url": "createpost"},
-        {"name": "новости", "url": "news"},
-        {"name": "вход", "url": "login"},
-    ]
+def get_db():
+    if not hasattr(g, 'link_db'):
+        g.link_db = connect_db()
+    return g.link_db
 
+from datetime import datetime
+# menu =[
+#         {"name": "Домашняя", "url": "/"},
+#         {"name": "Контакты", "url": "contact"},
+#         {"name": "Добавить поcт", "url": "createpost"},
+#         {"name": "новости", "url": "news"},
+#         {"name": "вход", "url": "login"},
+#     ]
 @app.route('/')
 def home():
     print(url_for('home'))
-    return render_template('home.html', title="домашняя", menu=menu)
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template('home.html', title="домашняя", menu=dbase.getMenu())
+
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, 'link_db'):
+        g.link_db.close()
+
 
 @app.route('/contact')
 def contact():
-    print(url_for('contact'))
-    return render_template('contact.html', title="Контакты", menu=menu)
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template('contact.html', title="Контакты", menu=dbase.getMenu())
 
 @app.route('/login')
 def login():
-    if 'userLogged' in session:
-        return redirect(url_for('profile', username=session['userLogged']))
-    elif request.form['username'] == "selfedu" and request.form['psw'] == "123":
-        session['userLogged'] = request.form['username']
-        return redirect(url_for('profile', username=session['userLogged']))
-
+    print(url_for('login'))
     return render_template('login.html', title="авторизация", menu=menu)
 
 @app.route('/news')

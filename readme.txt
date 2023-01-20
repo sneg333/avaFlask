@@ -7,6 +7,6 @@
 
 6 создание базы данных:
     python3 
-        from app import db
-          db.create_all() 
+        from app import create_db
+          create_db() 
           exit() 

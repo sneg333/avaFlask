@@ -5,6 +5,8 @@
         <div class="row">
 
             <div class="col-lg-4 col-md-6">
+                {{super()}}
+                {% for n in news %}
                 <div class="single_blog_post mb-40">
                     <div class="post_thumbnail">
                         <a href="blog-details.html"><img src="assets/img/blog/1.jpg" alt=""></a>
@@ -16,14 +18,15 @@
                             </ul>
                         </div>
                         <div class="blog_post_desc">
-                            <h2><a href="blog-details.html">Froome racing to spoil Yates’s pink Giro dream</a></h2>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry... </p>
+                            <h2><a href="{{ url_for('postDetail', id_new=n.id)}}">{{n.title}}</a></h2>
+                            <p>{{n.full_text[:50]}} </p>
                         </div>
                         <div class="read_more_btn">
-                            <a href="blog-details.html">Читать подробнее <span><i class="zmdi zmdi-arrow-right"></i></span></a>
+                            <a href="{{ url_for('postDetail', id_new=n.id)}}">Читать подробнее <span><i class="zmdi zmdi-arrow-right"></i></span></a>
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
             
         </div>

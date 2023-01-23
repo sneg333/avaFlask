@@ -17,7 +17,6 @@ def connect_db():
     conn.row_factory = sqlite3.Row
     return conn
 
-
 def create_db():
     db = connect_db()
     with app.open_resource('sq_db.sql', mode='r') as f:
@@ -31,13 +30,7 @@ def get_db():
     return g.link_db
 
 from datetime import datetime
-# menu =[
-#         {"name": "Домашняя", "url": "/"},
-#         {"name": "Контакты", "url": "contact"},
-#         {"name": "Добавить поcт", "url": "createpost"},
-#         {"name": "новости", "url": "news"},
-#         {"name": "вход", "url": "login"},
-#     ]
+
 @app.route('/')
 def home():
     print(url_for('home'))
@@ -55,7 +48,7 @@ def close_db(error):
 def contact():
     db = get_db()
     dbase = FDataBase(db)
-    return render_template('contact.html', title="Контакты", menu=dbase.getMenu())
+    return render_template('contact.html', title="Контакты", menu=dbase.getMenu(), contact=dbase.getContact())
 
 @app.route('/login')
 def login():
@@ -64,24 +57,43 @@ def login():
 
 @app.route('/news')
 def news():
-    print(url_for('news'))
-    return render_template('news.html', title="Новости", menu=menu)
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template('news.html', title="Новости", menu=dbase.getMenu(), news=dbase.getNewsAnonce())
+
 
 @app.route('/createpost', methods=["POST", "GET"])
 def createpost():
-    if request.method == 'POST':
-            if len(request.form['title']) > 2:
-                flash('сообщение отправлено успешно!!!', category='success')
-            else:
-                flash('ошибка отправки', category='error')
+    db = get_db()
+    dbase = FDataBase(db)
 
-    print(request.form)
-    print(url_for('createpost'))
-    return render_template('createpost.html', title="добавить пост", menu=menu)
+    if request.method == 'POST':
+        if len(request.form['title']) > 4 and len(request.form['full_text']) > 10:
+            res = dbase.createpost(request.form['title'], request.form['full_text'])
+            if not res:
+                flash('ошибка отправки', category='error')
+            else:
+                flash('сообщение отправлено успешно!!!', category='success')
+        else:
+            flash('ошибка отправки', category='error')
+
+    return render_template('createpost.html', title="добавить пост", menu=dbase.getMenu())
+
+@app.route("/new/<int:id_new>")
+def postDetail(id_new):
+    db = get_db()
+    dbase = FDataBase(db)
+    title, full_text = dbase.getNew(id_new)
+    if not title:
+        abort(404)
+
+    return render_template('new-detail.html', menu=dbase.getMenu(), title=title, full_text=full_text)
 
 @app.errorhandler(404)
 def pageNotFount(error):
-    return render_template('404.html', title="страница не найдена", menu=menu)
+    db = get_db()
+    dbase = FDataBase(db)
+    return render_template('404.html', title="страница не найдена", menu=dbase.getMenu())
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -13,12 +13,11 @@
                 {% for category, msg in get_flashed_messages(True) %}
                 <div class="flash {{category}}">{{msg}}</div>
                 {% endfor %}
-                 <form action="/createpost" method="POST">
+                 <form action="{{url_for('createpost')}}" method="POST">
                      <div class="single-contact-form d-flex">
                          <div class="contact-box">
                              <input name="title" type="text" placeholder="название поста *" >
-                             <textarea name="anons" type="text" placeholder="введите  анонс поста"></textarea>
-                             <br>
+                             
                              <textarea name="full_text" type="text" placeholder="введите текст поста"></textarea>
                              <br>
                          </div>

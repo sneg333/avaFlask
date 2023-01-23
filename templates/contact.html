@@ -9,11 +9,13 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="contact-us-desc">
-                           
+                            {{super()}}
+                        
+                            {% for c in contact %}
                              <div class="get-in-touch">
                                 <h3>Контакты</h3>
 
-                                <p>  </p>
+                                <p>  {{c.contact_text}}</p>
                              </div>
                              <div class="contact-social">
 
@@ -26,7 +28,7 @@
                                              <i class="zmdi zmdi-pin"></i>
                                          </div>
                                          <div class="conatct-desc">
-                                             <p>78 </p>
+                                             <p>{{c.adress}} </p>
                                          </div>
                                      </div>
                                      <div class="single-contact-list">
@@ -34,7 +36,7 @@
                                              <i class="zmdi zmdi-phone"></i>
                                          </div>
                                          <div class="conatct-desc">
-                                             <p> 78 </p>
+                                             <p> {{c.phone}} </p>
                                          </div>
                                      </div>
                                      <div class="single-contact-list">
@@ -42,11 +44,12 @@
                                              <i class="zmdi zmdi-email"></i>
                                          </div>
                                          <div class="conatct-desc">
-                                             <p>78 </p>
+                                             <p>{{c.email}} </p>
                                          </div>
                                      </div>
                                  </div>
                              </div>
+                             {%endfor %}
                         </div>
                         
                     </div>

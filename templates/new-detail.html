@@ -1,6 +1,52 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{{super()}}
+<div class="our_blog_area single_blog right_sidebar ptb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-12 col-12">
+                <div class="post_details_inner">
+                    <div class="single_post_thumbnail">
+                        <img src="assets/img/blog/large_1.jpg" alt="single post thumbail">
+                    </div>
+                    <div class="single_post_content">
+                        <div class="single_post_top_contnt">
+                            <div class="single_post_title">
+                                <h2>{{ title }}</h2>
+                            </div>
+                            <div class="single_post_meta">
+                                <div class="single_post_left_meta">
+                                    <ul>
+                                        <li>Feb 13, 2018</li>
+                                        <li>By: blendpixels</li>
+                                        <li>UI/UX Design</li>
+                                    </ul>
+                                </div>
+                                <div class="single_post_right_meta">
+                                    <ul>
+                                        <li>2 Comments</li>
+                                        <li>20 Like</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="post_excerpt">
+                            
+                            <p>{{ full_text }}</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--Our blob page end-->
 
 
  {% endblock %}

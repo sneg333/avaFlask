@@ -12,5 +12,8 @@ full_text text NOT NULL
 
 CREATE TABLE IF NOT EXISTS contact (
 id integer PRIMARY KEY AUTOINCREMENT,
-contact_text text NOT NULL
-)
+contact_text text NOT NULL,
+adress text NOT NULL,
+phone text NOT NULL,
+mail text NOT NULL
+);

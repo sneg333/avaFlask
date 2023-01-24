@@ -14,6 +14,16 @@ class FDataBase:
             print("ошибка чтения бд")
         return []
 
+    def getContact(self):
+        get_contact = '''SELECT * FROM contact'''
+        try:
+            self.__cur.execute(get_contact)
+            res = self.__cur.fetchall()
+            if res: return res
+        except:
+            print("Ошибка добавления статьи в БД")
+        return [] 
+
     #добавление новости
     def createpost(self, title, full_text):
         try:
@@ -39,15 +49,6 @@ class FDataBase:
             print("ошибка получения статьи из БД"+str(e))
 
         return (False, False)
-
-    def getContact(self, contact_text):
-        try:
-            self.__cur.execute("INSERT INTO contact VALUES(NULL, ?)", (contact_text))
-            self.__db.commit()
-        except sqlite3.Error as e:
-            print("Ошибка добавления статьи в БД"+str(e))
-            return False
-        return True 
 
     #отображение всех новостей
     def getNewsAnonce(self):

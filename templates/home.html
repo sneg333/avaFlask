@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <div class="exporso_wrapper">
     <!-- slider-area-start -->
     <div class="slider_wrapper">
@@ -35,23 +34,18 @@
                         <div class="sidebar_widget recent_post mb-65">
                             <div class="sidebar_title">
                                 <h3>Категории</h3>
-                            </div>
-                          
+                            </div>                      
                             <div class="single_recent_post">
                                 <div class="recent_post_img">
-                                    <a href="">
-                                       
-                                        <img src="" alt="">
-                                     
-                                        <p></p>
-                                   
+                                    <a href="">                                     
+                                        <img src="" alt="">                                    
+                                        <p></p> 
                                     </a>
                                 </div>
                                 <div class="post_content">
                                     <h3><a href=""></a></h3>
                                 </div>
                             </div>
-                         
                         </div>
 
                         <div class="sidebar_widget banner mb-65">
@@ -73,31 +67,24 @@
                             <div class="sidebar_title">
                                 <h3>Новости</h3>
                             </div>
+                            {% for n in news %}
                             <div class="widget_categories">
                                 <ul>
-                                   
-                                    <li><a href="/"> </a></li>
-                                   
+                                    <li><a href="{{ url_for('postDetail', id_new=n.id)}}"> {{n.title}}</a></li>
                                 </ul>
                             </div>
+                            {% endfor %}
                         </div>
-
-
                     </div>
                 </div>
-
                 <div class="col-lg-8 col-md-12 col-12 blog_details_content">
-                    <div class="row">
-                     
+                    <div class="row">                  
                         <div class="col-lg-6 col-md-6 col-12">
                             <div class="single_blog_post mb-40">
                                 <div class="post_thumbnail">
-                                    <a href="">
-                                        
-                                        <img src="" alt=""></a>
-                                  
-                                    <p></p>
-                                   
+                                    <a href="">                                       
+                                        <img src="" alt=""></a>                                
+                                    <p></p>                                 
                                 </div>
                                 <div class="post_content_meta">
                                     <div class="blog_post_desc">
@@ -105,8 +92,8 @@
                                         <p> </p>
                                     </div>
                                     <div class="read_more_btn">
-                                        <a href="">Читать дальше <span><i
-                                                class="zmdi zmdi-arrow-right"></i></span></a>
+                                        <a href="">Читать дальше <span>
+                                            <i class="zmdi zmdi-arrow-right"></i></span></a>
                                     </div>
                                 </div>
                             </div>
@@ -118,11 +105,8 @@
 
             <div class="row pagination_box mt-30">
                 <div class="col-12">
-                    <div class="pagination">
-                      
+                    <div class="pagination">       
                         <ul>
-
-                    
                             <li>
                                 <a href="/"><i class="zmdi zmdi-chevron-left"></i>
                                     назад
@@ -154,5 +138,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

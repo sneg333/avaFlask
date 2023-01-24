@@ -36,19 +36,18 @@ def home():
     print(url_for('home'))
     db = get_db()
     dbase = FDataBase(db)
-    return render_template('home.html', title="домашняя", menu=dbase.getMenu())
-
-@app.teardown_appcontext
-def close_db(error):
-    if hasattr(g, 'link_db'):
-        g.link_db.close()
-
+    return render_template('home.html', title="домашняя", menu=dbase.getMenu(), news=dbase.getNewsAnonce())
 
 @app.route('/contact')
 def contact():
     db = get_db()
     dbase = FDataBase(db)
     return render_template('contact.html', title="Контакты", menu=dbase.getMenu(), contact=dbase.getContact())
+
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, 'link_db'):
+        g.link_db.close()
 
 @app.route('/login')
 def login():

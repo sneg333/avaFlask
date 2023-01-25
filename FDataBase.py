@@ -60,3 +60,26 @@ class FDataBase:
             print("ошибка получения статьи из БД"+str(e))
 
         return[]
+
+#добавление блока администрирование
+    def getAdminPanel(self):
+        admin_panel = '''SELECT * FROM adminpanel'''
+        try:
+            self.__cur.execute(admin_panel)
+            res = self.__cur.fetchall()
+            if res: return res
+        except:
+            print("ошибка чтения бд")
+        return []
+
+#добавление продукта
+    def addproduct(self, title_product, body_product, url):
+        try:
+            self.__cur.execute("INSERT INTO product VALUES(NULL, ?, ?, ?)", (title_product, body_product, url))
+            #commit() сохраняет новые данные в базе данных
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print("Ошибка добавления продукта в БД"+str(e))
+            return False
+
+        return True

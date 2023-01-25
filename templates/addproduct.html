@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{super() }}
+<div class="row">
+    <div class="col-lg-10 offset-lg-1 col-md-12">
+        <div class="contact-form-inner pt-95">
+             <div class="contact-form-titile text-center">
+                 <h3>добавить продукт</h3>    
+             </div>
+            <div class="contat_form_inner mt-60">
+
+                {% for category, msg in get_flashed_messages(True) %}
+                <div class="flash {{category}}">{{msg}}</div>
+                {% endfor %}
+                 <form action="{{url_for('addproduct')}}" method="POST">
+                     <div class="single-contact-form d-flex">
+                         <div class="contact-box">
+                             <input name="title_product" type="text" placeholder="название продукта *" >
+                             <textarea name="url" type="text" placeholder="введите url продукта"></textarea>
+                             <textarea name="body_product" type="text" placeholder="введите текст продукта"></textarea>
+                             <br>
+                         </div>
+                     </div>
+                 
+                     <div class="contact-btn">
+                         <button type="submit">добавить продукт</button>
+                     </div>
+                     <p class="form-messege"></p>
+                 </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--Conatct form end-->
+
+{% endblock %}

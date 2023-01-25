@@ -50,6 +50,18 @@ class FDataBase:
 
         return (False, False)
 
+    #отображение продукта
+    def getProduct(self, alias):
+        try:
+            self.__cur.execute(f"SELECT title_product, body_product FROM product WHERE url LIKE '{alias}' LIMIT 1")
+            res = self.__cur.fetchone()
+            if res:
+                return res
+        except sqlite3.Error as e:
+            print("ошибка получения продукта из БД"+str(e))
+
+        return (False, False)
+
     #отображение всех новостей
     def getNewsAnonce(self):
         try:
@@ -75,7 +87,15 @@ class FDataBase:
 #добавление продукта
     def addproduct(self, title_product, body_product, url):
         try:
-            self.__cur.execute("INSERT INTO product VALUES(NULL, ?, ?, ?)", (title_product, body_product, url))
+            #проверка на уникальность URL продукта
+            self.__cur.execute(f"SELECT COUNT() as `count` FROM product WHERE url LIKE '{url}'")
+            res = self.__cur.fetchone()
+            if res['count'] >0:
+                print("продукт с таким url уже есть")
+                return False
+
+
+            self.__cur.execute("INSERT INTO product VALUES(NULL, ?, ?, ?)", (title_product, url, body_product))
             #commit() сохраняет новые данные в базе данных
             self.__db.commit()
         except sqlite3.Error as e:
@@ -83,3 +103,14 @@ class FDataBase:
             return False
 
         return True
+
+#отображение всех продуктов
+    def getProductsAll(self):
+        try:
+            self.__cur.execute(f"SELECT id, title_product, url, body_product FROM product")
+            res = self.__cur.fetchall()
+            if res: return res
+        except sqlite3.Error as e:
+            print("ошибка получения продуктов из БД"+str(e))
+
+        return[]

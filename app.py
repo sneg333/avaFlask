@@ -37,7 +37,7 @@ def home():
     print(url_for('home'))
     db = get_db()
     dbase = FDataBase(db)
-    return render_template('home.html', title="домашняя", menu=dbase.getMenu(), news=dbase.getNewsAnonce())
+    return render_template('home.html', title="домашняя", menu=dbase.getMenu(), news=dbase.getNewsAnonce(), products=dbase.getProductsAll())
 
 ####    ОТОБРАЖЕНИЕ СТРАНИЦЫ КОНТАКТЫ
 @app.route('/contact')
@@ -93,6 +93,17 @@ def postDetail(id_new):
 
     return render_template('new-detail.html', menu=dbase.getMenu(), title=title, full_text=full_text)
 
+###     ОТОБРАЖЕНИЯ ОДНОГО ПРОДУКТА
+@app.route("/product/<alias>")
+def productDetail(alias):
+    db = get_db()
+    dbase = FDataBase(db)
+    title_product, body_product = dbase.getProduct(alias)
+    if not title_product:
+        abort(404)
+
+    return render_template('product-detail.html', menu=dbase.getMenu(), title_product=title_product, body_product=body_product)
+
 ####################################### СТРАНИЦА АДМИНИСТРИРОВАНИЯ
 @app.route('/admin')
 def admin():
@@ -108,7 +119,7 @@ def addproduct():
 
     if request.method == 'POST':
         if len(request.form['title_product']) > 4 and len(request.form['body_product']) > 10:
-            res7 = dbase.addproduct(request.form['title_product'], request.form['body_product'])
+            res7 = dbase.addproduct(request.form['title_product'], request.form['body_product'], request.form['url'])
             if not res7:
                 flash('ошибка отправки', category='error')
             else:

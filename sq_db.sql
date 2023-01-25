@@ -21,8 +21,8 @@ mail text NOT NULL
 CREATE TABLE IF NOT EXISTS product (
 id integer PRIMARY KEY AUTOINCREMENT,
 title_product text NOT NULL,
-body_product text NOT NULL,
-url text NOT NULL
+url text NOT NULL,
+body_product text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS adminpanel (

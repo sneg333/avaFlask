@@ -77,8 +77,10 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-8 col-md-12 col-12 blog_details_content">
-                    <div class="row">                  
+                    <div class="row">  
+                        {% for p in products %}
                         <div class="col-lg-6 col-md-6 col-12">
                             <div class="single_blog_post mb-40">
                                 <div class="post_thumbnail">
@@ -89,16 +91,16 @@
                                 <div class="post_content_meta">
                                     <div class="blog_post_desc">
                                         <h2><span class="billion3"> <a href=""> </a></span></h2>
-                                        <p> </p>
+                                        <p>{{p.title_product}} </p>
                                     </div>
                                     <div class="read_more_btn">
-                                        <a href="">Читать дальше <span>
+                                        <a href="{{ url_for('productDetail', alias=p.url)}}">Читать дальше <span>
                                             <i class="zmdi zmdi-arrow-right"></i></span></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                     
+                        {% endfor %}
                     </div>
                 </div>
             </div>

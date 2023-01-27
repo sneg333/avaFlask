@@ -65,9 +65,9 @@ def login():
 ###     ОТОБРАЖЕНИЕ СТР РЕГИСТРАЦИИ
 @app.route('/register', methods=["POST", "GET"])
 def register():
-    if register.method == "POST":
-        if len(request.form['name']) > 4 and len(request.form['emaik']) > 4 \
-            and len(request.form['psw']) > 2 and (request.form['psw'] == request.form['psw2']):
+    if request.method == "POST":
+        if len(request.form['name']) > 4 and len(request.form['email']) > 4 \
+            and len(request.form['psw']) > 2 and request.form['psw'] == request.form['psw2']:
             hash = generate_password_hash(request.form['psw'])
             res = dbase.addUser(request.form['name'], request.form['email'], hash)
             if res:

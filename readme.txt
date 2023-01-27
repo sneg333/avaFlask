@@ -10,3 +10,9 @@
         from app import create_db
           create_db() 
           exit() 
+
+
+7 для кодирования пароля при регистрации
+сначала импортируем две фурнкции: generate_password_hash и check_password_hash
+    python3 
+        from werkzeug.security import generate_password_hash, check_password_hash

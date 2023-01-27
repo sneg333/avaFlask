@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{super()}}
+<div class="account_area ptb-100">
+    <div class="container">
+        <div class="row">
+           <!--login area start-->
+           {% for category, msg in get_flashed_messages(True) %}
+           <div class="flash {{category}}">{{msg}}</div>
+           {% endfor %}
+
+            <!--register area start-->
+            <div class="col-lg-6 col-md-12">
+                <div class="login_title">
+                    <h2>Регистрация</h2>
+                </div>
+                <div class="login_form form_register ">
+                    <form action="/register" method="POST">
+                        <div class="login_input">
+                            <label>Имя  <span>*</span></label>
+                            <input type="text" name="name" value="">
+                        </div>
+                        <div class="login_input">
+                            <label>Email  <span>*</span></label>
+                            <input type="text" name="email" value="">
+                        </div>
+                        <div class="login_input">
+                            <label>пароль <span>*</span></label>
+                            <input type="password" name="psw" value="">
+                        </div>
+                        <div class="login_input">
+                            <label>повторить пароль <span>*</span></label>
+                            <input type="password" name="psw2" value="">
+                        </div>
+
+                        <div class="login_submit">
+                            <button type="submit">Зарегистрировать</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--register area end-->
+        </div>
+    </div>
+</div>
+<!-- accont area end -->
+
+{% endblock %}

@@ -1,6 +1,7 @@
 import sqlite3
 import os
-from flask import Flask, render_template, url_for, request, flash, g
+from flask import Flask, render_template, url_for, request, flash, g, redirect, url_for
+from werkzeug.security import generate_password_hash, check_password_hash #генерация данных пароля
 from FDataBase import FDataBase
 
 DATABASE = 'tmp/app.db'
@@ -29,21 +30,26 @@ def get_db():
         g.link_db = connect_db()
     return g.link_db
 
-from datetime import datetime
+### делаем глобальную функцию, что бы она была доступной во всех запросах
+dbase = None
+### def before_request(): = соединение с БД перед выполеннием запроса
+@app.before_request
+def before_request():
+    global dbase
+    db = get_db()
+    dbase = FDataBase(db)
+
+
 
 ###     ОТОБРАЖЕНИЕ ДОМАШНЕЙ СТРАНИЦЫ
 @app.route('/')
 def home():
     print(url_for('home'))
-    db = get_db()
-    dbase = FDataBase(db)
     return render_template('home.html', title="домашняя", menu=dbase.getMenu(), news=dbase.getNewsAnonce(), products=dbase.getProductsAll())
 
 ####    ОТОБРАЖЕНИЕ СТРАНИЦЫ КОНТАКТЫ
 @app.route('/contact')
 def contact():
-    db = get_db()
-    dbase = FDataBase(db)
     return render_template('contact.html', title="Контакты", menu=dbase.getMenu(), contact=dbase.getContact())
 
 @app.teardown_appcontext
@@ -54,22 +60,34 @@ def close_db(error):
 ###     ОТОБРАЖЕНИЕ СТРАНИЦЫ ЛОГИН
 @app.route('/login')
 def login():
-    print(url_for('login'))
-    return render_template('login.html', title="авторизация", menu=menu)
+    return render_template('login.html', title="авторизация", menu=dbase.getMenu())
+
+###     ОТОБРАЖЕНИЕ СТР РЕГИСТРАЦИИ
+@app.route('/register', methods=["POST", "GET"])
+def register():
+    if register.method == "POST":
+        if len(request.form['name']) > 4 and len(request.form['emaik']) > 4 \
+            and len(request.form['psw']) > 2 and (request.form['psw'] == request.form['psw2']):
+            hash = generate_password_hash(request.form['psw'])
+            res = dbase.addUser(request.form['name'], request.form['email'], hash)
+            if res:
+                flash("вы успешно зарегистрированы", "soccess")
+                return redirect(url_for('login'))
+            else:
+                flash("ошибка при добавлении в БД", "error")
+        else:
+            flash("неверно заполнены поля", "error")
+
+    return render_template('register.html', title="регистрация", menu=dbase.getMenu())
 
 ###     ОТОБРАЖЕНИЕ ВСЕХ НОВОСТЕЙ
 @app.route('/news')
 def news():
-    db = get_db()
-    dbase = FDataBase(db)
     return render_template('news.html', title="Новости", menu=dbase.getMenu(), news=dbase.getNewsAnonce())
 
 #####   ДОБАВЛЕНИЕ НОВОЙ НОВОСТИ
 @app.route('/createpost', methods=["POST", "GET"])
 def createpost():
-    db = get_db()
-    dbase = FDataBase(db)
-
     if request.method == 'POST':
         if len(request.form['title']) > 4 and len(request.form['full_text']) > 10:
             res = dbase.createpost(request.form['title'], request.form['full_text'])
@@ -85,37 +103,27 @@ def createpost():
 ###     ОТОБРАЖЕНИЯ ОДНОЙ НОВОСТИ
 @app.route("/new/<int:id_new>")
 def postDetail(id_new):
-    db = get_db()
-    dbase = FDataBase(db)
     title, full_text = dbase.getNew(id_new)
     if not title:
         abort(404)
-
     return render_template('new-detail.html', menu=dbase.getMenu(), title=title, full_text=full_text)
 
 ###     ОТОБРАЖЕНИЯ ОДНОГО ПРОДУКТА
 @app.route("/product/<alias>")
 def productDetail(alias):
-    db = get_db()
-    dbase = FDataBase(db)
     title_product, body_product = dbase.getProduct(alias)
     if not title_product:
         abort(404)
-
     return render_template('product-detail.html', menu=dbase.getMenu(), title_product=title_product, body_product=body_product)
 
 ####################################### СТРАНИЦА АДМИНИСТРИРОВАНИЯ
 @app.route('/admin')
 def admin():
-    db = get_db()
-    dbase = FDataBase(db)
     return render_template('admin.html', title="администрирование", menu=dbase.getMenu(), adminpanel=dbase.getAdminPanel())
 
 #############ДОБАВИТЬ ПРОДУКТ
 @app.route('/addproduct', methods=["POST", "GET"])
 def addproduct():
-    db = get_db()
-    dbase = FDataBase(db)
 
     if request.method == 'POST':
         if len(request.form['title_product']) > 4 and len(request.form['body_product']) > 10:
@@ -132,10 +140,7 @@ def addproduct():
 ######################404#####################
 @app.errorhandler(404)
 def pageNotFount(error):
-    db = get_db()
-    dbase = FDataBase(db)
     return render_template('404.html', title="страница не найдена", menu=dbase.getMenu())
-
 if __name__ == "__main__":
     app.run(debug=True)
 

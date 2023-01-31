@@ -3,7 +3,7 @@ import os
 from flask import Flask, render_template, url_for, request, flash, g, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash #генерация данных пароля
 from FDataBase import FDataBase
-from flask_login import LoginManager, login_user, login_required
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from UserLogin import UserLogin
 
 DATABASE = 'tmp/app.db'
@@ -15,6 +15,10 @@ app.config.from_object(__name__)
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'app.db')))
 
 login_manager = LoginManager(app)
+#перенаправляем неавторизованного пользователя
+login_manager.login_view = 'login'
+login_manager.login_message = "Авторизуйтесь для досутпа к закрытым страницам"
+login_manager.login_message_category = "success"
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -69,12 +73,21 @@ def close_db(error):
 ###     ОТОБРАЖЕНИЕ СТРАНИЦЫ ЛОГИН
 @app.route('/login', methods=["POST", "GET"])
 def login():
+    # если пользователь авторизован, перенаправляем его на другую стр если 
+    # он пытается второй раз авторизоватсья
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
+
     if request.method == "POST":
         user = dbase.getUserByEmail(request.form['email'])
         if user and check_password_hash(user['psw'], request.form['psw']):
             userlogin = UserLogin().create(user)
-            login_user(userlogin)
-            return redirect(url_for('home'))
+            #реализайция кнопки запомнить меня
+            rm = True if request.form.get('remainme') else False
+            login_user(userlogin, remember=rm)
+            # перенаправляем на стр которую смотрел неавторизованный пользователь
+            # он попадает на неё после регистрации
+            return redirect(request.args.get("next") or url_for('profile'))
 
         flash("неварная пара логин/пароль", "error")
     return render_template('login.html', title="авторизация", menu=dbase.getMenu())
@@ -96,6 +109,22 @@ def register():
             flash("неверно заполнены поля", "error")
 
     return render_template('register.html', title="регистрация", menu=dbase.getMenu())
+
+### ВЫЙТИ ИЗ ПРОФИЛЯ
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash("вы вышли из аккаунта", "soccess")
+    return redirect(url_for('login'))
+
+###страница профиля
+@app.route('/profile')
+#доступна только для авторизованных пользователей
+@login_required
+def profile():
+    return f"""<p><a href="{url_for('logout')}">Выйти из профиля</a>
+                <p>user info: {current_user.get_id()}"""
 
 ###     ОТОБРАЖЕНИЕ ВСЕХ НОВОСТЕЙ
 @app.route('/news')
@@ -159,6 +188,7 @@ def addproduct():
 @app.errorhandler(404)
 def pageNotFount(error):
     return render_template('404.html', title="страница не найдена", menu=dbase.getMenu())
+
 if __name__ == "__main__":
     app.run(debug=True)
 

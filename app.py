@@ -3,6 +3,8 @@ import os
 from flask import Flask, render_template, url_for, request, flash, g, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash #генерация данных пароля
 from FDataBase import FDataBase
+from flask_login import LoginManager, login_user, login_required
+from UserLogin import UserLogin
 
 DATABASE = 'tmp/app.db'
 DEBUG = True
@@ -11,6 +13,13 @@ SECRET_KEY = '112244'
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.config.update(dict(DATABASE=os.path.join(app.root_path, 'app.db')))
+
+login_manager = LoginManager(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    print("load_user")
+    return UserLogin().fromDB(user_id, dbase)
 
 #   функция для установления соединения с БД
 def connect_db():
@@ -58,8 +67,16 @@ def close_db(error):
         g.link_db.close()
 
 ###     ОТОБРАЖЕНИЕ СТРАНИЦЫ ЛОГИН
-@app.route('/login')
+@app.route('/login', methods=["POST", "GET"])
 def login():
+    if request.method == "POST":
+        user = dbase.getUserByEmail(request.form['email'])
+        if user and check_password_hash(user['psw'], request.form['psw']):
+            userlogin = UserLogin().create(user)
+            login_user(userlogin)
+            return redirect(url_for('home'))
+
+        flash("неварная пара логин/пароль", "error")
     return render_template('login.html', title="авторизация", menu=dbase.getMenu())
 
 ###     ОТОБРАЖЕНИЕ СТР РЕГИСТРАЦИИ
@@ -110,6 +127,7 @@ def postDetail(id_new):
 
 ###     ОТОБРАЖЕНИЯ ОДНОГО ПРОДУКТА
 @app.route("/product/<alias>")
+@login_required
 def productDetail(alias):
     title_product, body_product = dbase.getProduct(alias)
     if not title_product:
@@ -137,7 +155,7 @@ def addproduct():
 
     return render_template('addproduct.html', title="добавить продукт", menu=dbase.getMenu(), )
 
-######################404#####################
+######################  404  #####################
 @app.errorhandler(404)
 def pageNotFount(error):
     return render_template('404.html', title="страница не найдена", menu=dbase.getMenu())

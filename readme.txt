@@ -16,3 +16,11 @@
 сначала импортируем две фурнкции: generate_password_hash и check_password_hash
     python3 
         from werkzeug.security import generate_password_hash, check_password_hash
+
+8 flask-Login
+    pip install flask-login
+
+    в app.py
+    from flask_login import LoginManager
+
+    login_manager = LoginManager(app)

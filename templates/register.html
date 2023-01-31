@@ -6,12 +6,14 @@
     <div class="container">
         <div class="row">
            <!--login area start-->
-           {% for category, msg in get_flashed_messages(True) %}
-           <div class="flash {{category}}">{{msg}}</div>
-           {% endfor %}
+
 
             <!--register area start-->
             <div class="col-lg-6 col-md-12">
+                {% for category, msg in get_flashed_messages(True) %}
+                <div class="flash {{category}}">{{msg}}</div>
+                {% endfor %}
+                
                 <div class="login_title">
                     <h2>Регистрация</h2>
                 </div>

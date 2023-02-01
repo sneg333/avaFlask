@@ -1,3 +1,4 @@
+from flask import url_for
 class UserLogin():
     def fromDB(self, user_id, db):
         self.__user = db.getUser(user_id)
@@ -18,3 +19,30 @@ class UserLogin():
 
     def get_id(self):
         return str(self.__user['id'])
+
+
+    def getName(self):
+        return self.__user['name'] if self.__user else "без имени"
+
+    def getEmail(self):
+        return self.__user['email'] if self.__user else "без email"
+
+    def getAvatar(self, app):
+        img = None
+        if not self.__user['avatar']:
+            try:
+                with app.open_resource(app.root_path + url_for('static', filename='img/default.png'), "rb") as f:
+                    img = f.read()
+            except FileNotFoundError as e:
+                print("Не найден аватар по умолчанию"+str(e))
+        else:
+            img = self.__user['avatar']
+
+        return img
+
+    # проверка файла загружаемого на аватар пользователя
+    def verifyExt(self, filename):
+        ext = filename.rsplit('.', 1)[1]
+        if ext == "png" or ext == "PNG":
+            return True
+        return False

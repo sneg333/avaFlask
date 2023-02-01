@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from flask import Flask, render_template, url_for, request, flash, g, redirect, url_for
+from flask import Flask, render_template, url_for, request, flash, g, redirect, url_for, make_response
 from werkzeug.security import generate_password_hash, check_password_hash #генерация данных пароля
 from FDataBase import FDataBase
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -9,6 +9,8 @@ from UserLogin import UserLogin
 DATABASE = 'tmp/app.db'
 DEBUG = True
 SECRET_KEY = '112244'
+#какого максимального объёма можно загружать файл на сервер
+MAX_CONTENT_LENGTH = 1024 * 1024
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -123,8 +125,40 @@ def logout():
 #доступна только для авторизованных пользователей
 @login_required
 def profile():
-    return f"""<p><a href="{url_for('logout')}">Выйти из профиля</a>
-                <p>user info: {current_user.get_id()}"""
+    return render_template("profile.html", menu=dbase.getMenu(), title="Профиль")
+
+### АВАТАР ПОЛЬЗОВАТЕЛЯ
+@app.route('/userava')
+@login_required
+def userava():
+    img = current_user.getAvatar(app)
+    if not img:
+        return ""
+
+    h = make_response(img)
+    h.headers['Content-Type'] = 'image/png'
+    return h
+
+### загружаем аватар пользователя
+@app.route('/upload', methods=["POST", "GET"])
+@login_required
+def upload():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and current_user.verifyExt(file.filename):
+            try:
+                img = file.read()
+                res = dbase.updateUserAvatar(img, current_user.get_id())
+                if not res:
+                    flash("Ошибка  обновленич аватара", "error")
+                flash("аватар обновлён", "success")
+            except FileNotFoundError as e:
+                flash("ошибка чтения файла", "error")
+
+        else:
+            flash("ошибка обновления аватара", "error")
+
+    return redirect(url_for('profile'))
 
 ###     ОТОБРАЖЕНИЕ ВСЕХ НОВОСТЕЙ
 @app.route('/news')

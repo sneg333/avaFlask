@@ -1,3 +1,5 @@
+import sqlite3
+
 class FDataBase:
     def __init__(self, db):
         self.__db = db
@@ -124,7 +126,7 @@ class FDataBase:
                 print("Пользователь с таким email уже существует")
                 return False
 
-            self.__cur.execute("INSERT INTO users VALUES(NULL, ?, ?, ?)", (name, email, hpsw))
+            self.__cur.execute("INSERT INTO users VALUES(NULL, ?, ?, ?, NULL)", (name, email, hpsw))
             self.__db.commit()
         except sqlite3.Error as e:
             print("Ошибка добавления пользователя в БД"+str(e))
@@ -159,3 +161,16 @@ class FDataBase:
             print("ошибка получения данных из БД"+str(e))
 
         return False
+
+    def updateUserAvatar(self, avatar, user_id):
+        if not avatar:
+            return False
+
+        try:
+            binary = sqlite3.Binary(avatar)
+            self.__cur.execute(f"UPDATE users SET avatar = ? WHERE id = ?", (binary, user_id))
+            self.__db.commit()
+        except sqlite3.Error as e:
+            print("ошибка обновления аватара в БД"+str(e))
+            return False
+        return True

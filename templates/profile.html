@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{{super()}}
+<div class="administrator">
+
+    {% for category, msg in get_flashed_messages(True) %}
+    <div class="flash {{category}}">{{msg}}</div>
+    {% endfor %}
+
+    <div class="administrator_thumb">
+        <img src="{{url_for('userava')}}">
+    </div>
+    <div>
+        <form action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">
+            <p><input type="file" name="file"></p>
+            <p><input type="submit" value="Загрузить">
+        </from>
+    </div>
+    <div class="administrator_contnet">
+        <h4>name: {{current_user.getName()}}</h4>
+        <h4>email: {{current_user.getEmail()}}</h4>
+        <p> <a href="{{url_for('logout')}}"> выйти из профиля </a></p>
+   
+    </div>
+</div>
+{% endblock %}

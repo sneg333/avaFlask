@@ -18,20 +18,38 @@
                     <div class="login_form login">
 
                         <form action="" method="post">
+                            {{ form.hidden_tag() }}
                             <div class="login_input">
-                                <label>введите email <span>*</span></label>
-                                <input type="text" name="email" value="">
+                                
+                                {{ form.email.label() }} 
+                            {% if form.email.errors %}
+                                {{ form.email(class="invalid") }}
+                                    <span class="invalid-feedback">
+                                        {% for e in form.email.errors %}
+                                            {{ e }}
+                                        {% endfor %}
+                                    </span>
+                            {% else %}
+                                    {{ form.email() }}
+                            {% endif %}
                             </div>
                             <div class="login_input">
-                                <label>Пароль  <span>*</span></label>
-                                <input type="password" name="psw" value="">
+                                {{ form.psw.label() }} 
+
+                                {% if form.psw.errors %}
+                                {{ form.psw(class="invalid") }}
+                                    <span class="invalid-feedback">
+                                        {% for e in form.psw.errors %}
+                                            {{ e }}
+                                        {% endfor %}
+                                    </span>
+                            {% else %}
+                                    {{ form.psw() }}
+                            {% endif %}
                             </div>
                             <div class="login_submit">
-                                <button type="submit">войти</button>
-                                <label for="remember">
-                                    <input name="remainme" type="checkbox">
-                                    запомнить меня
-                                </label>
+                                {{ form.submit() }} 
+                                {{ form.remember.label() }} {{ form.remember() }}
                                 <a href="{{url_for('register')}}">не зарегистрированы?</a>
                             </div>
                         </form>

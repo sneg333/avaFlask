@@ -24,3 +24,11 @@
     from flask_login import LoginManager
 
     login_manager = LoginManager(app)
+
+8
+    установка пакета для работы с формами
+        pip install flask_wtf
+    
+    для регистрации по email установить
+    pip install email-validator
+
